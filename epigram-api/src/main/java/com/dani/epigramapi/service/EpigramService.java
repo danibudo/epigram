@@ -4,6 +4,7 @@ import com.dani.epigramapi.dto.EpigramDto;
 import com.dani.epigramapi.dto.EpigramRequest;
 import com.dani.epigramapi.model.Epigram;
 import com.dani.epigramapi.repository.EpigramRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
@@ -11,13 +12,10 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
+@RequiredArgsConstructor
 public class EpigramService {
 
     private final EpigramRepository repository;
-
-    public EpigramService(EpigramRepository repository) {
-        this.repository = repository;
-    }
 
     public EpigramDto getRandom() {
         return repository.findRandom()
