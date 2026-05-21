@@ -9,6 +9,30 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U epigram_user -d epigrams"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  epigram-api:
+    build: ./epigram-api
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/epigrams
+      SPRING_DATASOURCE_USERNAME: epigram_user
+      SPRING_DATASOURCE_PASSWORD: epigram_pass
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  epigram-ui:
+    build: ./epigram-ui
+    ports:
+      - "5173:80"
+    depends_on:
+      - epigram-api
 
 volumes:
   postgres_data:
