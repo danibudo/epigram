@@ -25,9 +25,6 @@ public class EpigramService {
     }
 
     public EpigramDto create(EpigramRequest request) {
-        if (request.text() == null || request.text().isBlank()) {
-            throw new IllegalArgumentException("Text must not be blank");
-        }
         try {
             Epigram epigram = Epigram.builder()
                     .text(request.text().strip())

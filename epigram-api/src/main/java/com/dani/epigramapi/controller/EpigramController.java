@@ -3,6 +3,7 @@ package com.dani.epigramapi.controller;
 import com.dani.epigramapi.dto.EpigramDto;
 import com.dani.epigramapi.dto.EpigramRequest;
 import com.dani.epigramapi.service.EpigramService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +30,7 @@ public class EpigramController {
     }
 
     @PostMapping
-    public ResponseEntity<EpigramDto> create(@RequestBody EpigramRequest request) {
+    public ResponseEntity<EpigramDto> create(@Valid @RequestBody EpigramRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.create(request));
     }
 }
