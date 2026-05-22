@@ -2,6 +2,7 @@ package com.dani.epigramapi.service;
 
 import com.dani.epigramapi.dto.EpigramDto;
 import com.dani.epigramapi.dto.EpigramRequest;
+import com.dani.epigramapi.exception.DuplicateEpigramException;
 import com.dani.epigramapi.model.Epigram;
 import com.dani.epigramapi.repository.EpigramRepository;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +36,7 @@ public class EpigramService {
                     .build();
             return EpigramDto.from(repository.save(epigram));
         } catch (DataIntegrityViolationException e) {
-            throw new DataIntegrityViolationException("An epigram with that text already exists");
+            throw new DuplicateEpigramException("An epigram with that text already exists");
         }
     }
 
