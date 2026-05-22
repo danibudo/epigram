@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { createEpigram } from '../../api'
 import styles from './SubmitForm.module.css'
 
 type Status = { type: 'success' | 'error'; message: string } | null
@@ -15,29 +16,22 @@ export default function SubmitForm() {
     setSubmitting(true)
     setStatus(null)
     try {
-      const res = await fetch('/api/epigrams/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          text,
-          author: author.trim() || null,
-          source: source.trim() || null,
-        }),
-      })
-      if (res.status === 409) {
+      await createEpigram({ text, author: author.trim() || null, source: source.trim() || null })
+      setStatus({ type: 'success', message: 'Epigram submitted — thanks for your contribution!' })
+      setText('')
+      setAuthor('')
+      setSource('')
+    } catch (err) {
+      const status = (err as { status?: number }).status
+      if (status === 409) {
         setStatus({ type: 'error', message: 'This epigram already exists.' })
-      } else if (res.status === 400) {
+      } else if (status === 400) {
         setStatus({ type: 'error', message: 'Epigram text is required.' })
-      } else if (!res.ok) {
+      } else if (status) {
         setStatus({ type: 'error', message: 'Something went wrong. Please try again.' })
       } else {
-        setStatus({ type: 'success', message: 'Epigram submitted — thanks for your contribution!' })
-        setText('')
-        setAuthor('')
-        setSource('')
+        setStatus({ type: 'error', message: 'Network error. Is the API running?' })
       }
-    } catch {
-      setStatus({ type: 'error', message: 'Network error. Is the API running?' })
     } finally {
       setSubmitting(false)
     }

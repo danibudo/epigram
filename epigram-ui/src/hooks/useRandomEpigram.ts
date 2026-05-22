@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import type { EpigramDto } from '../types'
+import { getRandom } from '../api'
 
 export function useRandomEpigram() {
   const [epigram, setEpigram] = useState<EpigramDto | null>(null)
@@ -12,10 +13,7 @@ export function useRandomEpigram() {
     setLoading(true)
     setError(null)
     try {
-      const res = await fetch('/api/epigrams/random')
-      if (!res.ok) throw new Error(`${res.status}`)
-      const data: EpigramDto = await res.json()
-      setEpigram(data)
+      setEpigram(await getRandom())
     } catch {
       setError('Could not load epigram. Is the API running?')
     } finally {
