@@ -21,13 +21,11 @@ public class Epigram {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "text", nullable = false, unique = true)
+    @Column(nullable = false, unique = true)
     private String text;
 
-    @Column(name = "author")
     private String author;
 
-    @Column(name = "source")
     private String source;
 
     @Setter(lombok.AccessLevel.NONE)
